@@ -76,7 +76,6 @@ const CadastroCliente = () => {
       Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
       navigation.navigate("LoginCliente");
     } catch (error) {
-      console.log(error);
       Alert.alert("Erro", "Falha no cadastro: " + error.message);
     }
   };

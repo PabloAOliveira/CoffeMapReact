@@ -1,4 +1,4 @@
-// import React, { useState } from "react";
+// import React, { useState, useEffect } from "react";
 // import {
 //   View,
 //   Text,
@@ -15,13 +15,34 @@
 // import { useNavigation } from "@react-navigation/native";
 // import { getDoc, doc } from "firebase/firestore";
 // import { db } from "../config/firebase";
+// import * as Location from "expo-location";
 
 // const LoginCliente = () => {
 //   const [email, setEmail] = useState("");
 //   const [password, setPassword] = useState("");
 //   const [rememberMe, setRememberMe] = useState(false);
 //   const [loading, setLoading] = useState(false);
+//   const [locationLoading, setLocationLoading] = useState(false);
 //   const navigation = useNavigation();
+
+//   const loadLocation = async () => {
+//     try {
+//       setLocationLoading(true);
+//       let { status } = await Location.requestForegroundPermissionsAsync();
+//       if (status !== "granted") {
+//         Alert.alert("Erro", "Permissão para acessar a localização foi negada");
+//         setLocationLoading(false);
+//         return;
+//       }
+
+//       const currentLocation = await Location.getCurrentPositionAsync({});
+//       setLocationLoading(false);
+//       return currentLocation;
+//     } catch (error) {
+//       setMessage(`Erro : ${error.message || "Tente novamente mais tarde."}`);
+//       setLocationLoading(false);
+//     }
+//   };
 
 //   const handleLogin = async () => {
 //     setLoading(true);
@@ -50,6 +71,12 @@
 //       }
 
 //       navigation.navigate("HomeMap");
+
+//       const currentLocation = await loadLocation();
+//       if (currentLocation) {
+//         navigation.setParams({ location: currentLocation });
+//       }
+
 //       setLoading(false);
 //     } catch (error) {
 //       Alert.alert("Erro", "Falha no login. Verifique suas credenciais.");
@@ -114,6 +141,13 @@
 //             <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
 //               <Text style={styles.loginButtonText}>Entrar</Text>
 //             </TouchableOpacity>
+//           )}
+
+//           {locationLoading && (
+//             <View style={styles.loadingContainer}>
+//               <ActivityIndicator size="large" color="#7D5745" />
+//               <Text style={styles.loadingText}>Carregando localização...</Text>
+//             </View>
 //           )}
 
 //           <Text style={styles.orText}>Ou continue com</Text>
@@ -244,6 +278,15 @@
 //     color: "#7D5745",
 //     fontWeight: "bold",
 //   },
+//   loadingContainer: {
+//     justifyContent: "center",
+//     alignItems: "center",
+//     marginTop: 20,
+//   },
+//   loadingText: {
+//     marginTop: 10,
+//     color: "#7D5745",
+//   },
 // });
 
 // export default LoginCliente;
@@ -260,7 +303,10 @@ import {
   ImageBackground,
   ActivityIndicator,
 } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { auth } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { getDoc, doc } from "firebase/firestore";
@@ -289,7 +335,12 @@ const LoginCliente = () => {
       setLocationLoading(false);
       return currentLocation;
     } catch (error) {
-      console.error("Erro ao obter localização", error);
+      Alert.alert(
+        "Erro",
+        `Erro ao carregar localização: ${
+          error.message || "Tente novamente mais tarde."
+        }`
+      );
       setLocationLoading(false);
     }
   };
@@ -307,6 +358,7 @@ const LoginCliente = () => {
       const userDoc = await getDoc(doc(db, "usuarios", user.uid));
 
       if (!userDoc.exists()) {
+        console.log("User Data:", userData);
         Alert.alert("Erro", "Usuário não encontrado!");
         setLoading(false);
         return;
@@ -318,18 +370,57 @@ const LoginCliente = () => {
         Alert.alert("Acesso Negado", "Esta área é exclusiva para clientes.");
         await auth.signOut();
         setLoading(false);
+        return;
       }
-
-      navigation.navigate("HomeMap");
 
       const currentLocation = await loadLocation();
       if (currentLocation) {
         navigation.setParams({ location: currentLocation });
       }
 
+      navigation.navigate("HomeMap");
       setLoading(false);
     } catch (error) {
       Alert.alert("Erro", "Falha no login. Verifique suas credenciais.");
+      setLoading(false);
+    }
+  };
+
+  // Nova função para redefinição de senha
+  const handleForgotPassword = async () => {
+    if (!email) {
+      Alert.alert(
+        "Erro",
+        "Por favor, insira seu email primeiro para redefinir a senha."
+      );
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert(
+        "Redefinição de Senha",
+        "Um link para redefinir sua senha foi enviado para o seu email."
+      );
+    } catch (error) {
+      let errorMessage = "Erro ao enviar o link de redefinição de senha.";
+
+      switch (error.code) {
+        case "auth/invalid-email":
+          errorMessage = "Email inválido. Verifique o endereço de email.";
+          break;
+        case "auth/user-not-found":
+          errorMessage = "Não existe uma conta associada a este email.";
+          break;
+        case "auth/too-many-requests":
+          errorMessage =
+            "Muitas tentativas. Por favor, tente novamente mais tarde.";
+          break;
+      }
+
+      Alert.alert("Erro", errorMessage);
+    } finally {
       setLoading(false);
     }
   };
@@ -380,7 +471,10 @@ const LoginCliente = () => {
               {rememberMe && <View style={styles.checked} />}
             </TouchableOpacity>
             <Text style={styles.rememberText}>Lembre de mim</Text>
-            <TouchableOpacity style={styles.forgotPassword}>
+            <TouchableOpacity
+              style={styles.forgotPassword}
+              onPress={handleForgotPassword}
+            >
               <Text style={styles.forgotText}>Esqueceu sua senha?</Text>
             </TouchableOpacity>
           </View>
@@ -478,6 +572,9 @@ const styles = StyleSheet.create({
   rememberText: {
     color: "#7D5745",
     flex: 1,
+  },
+  forgotPassword: {
+    // Opcional: pode adicionar estilos específicos para o link
   },
   forgotText: {
     color: "#7D5745",

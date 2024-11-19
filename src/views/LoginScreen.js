@@ -10,7 +10,10 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { auth } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { doc, getDoc } from "firebase/firestore";
@@ -58,8 +61,39 @@ const LoginScreen = () => {
     navigation.navigate("CadastroScreen");
   };
 
-  const handleEsqueceuSenha = () => {
-    navigation.navigate("RecuperarSenha");
+  const handleEsqueceuSenha = async () => {
+    if (!email) {
+      Alert.alert(
+        "Email Necessário",
+        "Por favor, insira seu email no campo de email antes de redefinir a senha."
+      );
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert(
+        "Redefinição de Senha",
+        "Um link para redefinir sua senha foi enviado para o seu email."
+      );
+    } catch (error) {
+      let errorMessage = "Erro ao enviar email de redefinição de senha.";
+
+      switch (error.code) {
+        case "auth/invalid-email":
+          errorMessage = "Email inválido. Verifique o endereço de email.";
+          break;
+        case "auth/user-not-found":
+          errorMessage = "Nenhum usuário encontrado com este email.";
+          break;
+        case "auth/too-many-requests":
+          errorMessage =
+            "Muitas tentativas. Por favor, tente novamente mais tarde.";
+          break;
+      }
+
+      Alert.alert("Erro", errorMessage);
+    }
   };
 
   return (

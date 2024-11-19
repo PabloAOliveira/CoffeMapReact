@@ -28,7 +28,8 @@ export default function ProfileScreen() {
         const user = auth.currentUser;
 
         if (!user) {
-          console.log("Usuário não autenticado");
+          setMessage(`Erro : ${error.message || "Usuário não autenticado"}`);
+
           return;
         }
 
@@ -39,7 +40,9 @@ export default function ProfileScreen() {
           const userSnap = await getDoc(userRef);
 
           if (!userSnap.exists()) {
-            console.log("Dados do usuário não encontrados");
+            setMessage(
+              `Erro : ${error.message || "Dados do usuário não encontrados"}`
+            );
             return;
           }
 
@@ -55,13 +58,13 @@ export default function ProfileScreen() {
           if (cafeteriaSnap.exists()) {
             setCafeteriaData(cafeteriaSnap.data());
           } else {
-            console.log("Cafeteria não encontrada");
+            setMessage(`Erro : ${error.message || "Cafeteria não encontrada"}`);
           }
         } catch (error) {
-          console.error("Erro de permissão: ", error.message);
+          setMessage(`Erro : ${error.message || "Erro de permissão"}`);
         }
       } catch (error) {
-        console.error("Erro ao buscar dados: ", error);
+        setMessage(`Erro : ${error.message || "Erro ao buscar dados"}`);
       }
     };
 
