@@ -1,4 +1,5 @@
 import * as React from "react";
+import "react-native-get-random-values";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet, Text, View } from "react-native";
@@ -9,6 +10,7 @@ import LoginScreen from "./src/views/LoginScreen";
 import LoginCliente from "./src/views/LoginCliente";
 import CadastroCliente from "./src/views/CadastroCliente";
 import HomeMap from "./src/views/HomeMap";
+import ProfileScreen from "./src/views/ProfileScreen";
 
 const Stack = createStackNavigator();
 
@@ -45,6 +47,11 @@ export default function App() {
           name="CadastroScreen"
           options={{ headerShown: false }}
           component={CadastroScreen}
+        />
+        <Stack.Screen
+          name="ProfileScreen"
+          options={{ headerShown: false }}
+          component={ProfileScreen}
         />
         <Stack.Screen
           name="CadastroCliente"

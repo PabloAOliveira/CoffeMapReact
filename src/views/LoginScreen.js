@@ -48,8 +48,7 @@ const LoginScreen = () => {
         return;
       }
 
-      Alert.alert("Sucesso", "Login de proprietário realizado com sucesso!");
-      navigation.navigate("HomeProprietario");
+      navigation.navigate("ProfileScreen");
     } catch (error) {
       Alert.alert("Erro", "Falha no login. Verifique suas credenciais.");
     }
