@@ -447,7 +447,7 @@ const LoginCliente = () => {
             value={email}
             onChangeText={setEmail}
             placeholder="Email"
-            placeholderTextColor="#999"
+            placeholderTextColor="#666"
             autoCapitalize="none"
             keyboardType="email-address"
             autoComplete="email"
@@ -458,7 +458,7 @@ const LoginCliente = () => {
             value={password}
             onChangeText={setPassword}
             placeholder="Senha"
-            placeholderTextColor="#999"
+            placeholderTextColor="#666"
             secureTextEntry
             autoCapitalize="none"
           />
@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#7D5745",
+    color: "#8B4513",
     marginBottom: 8,
   },
   subtitle: {
@@ -542,11 +542,13 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#F5F5F5",
     borderRadius: 8,
     paddingHorizontal: 16,
     marginBottom: 16,
     fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
   },
   rememberContainer: {
     flexDirection: "row",

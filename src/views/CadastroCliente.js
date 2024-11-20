@@ -170,7 +170,7 @@ const CadastroCliente = () => {
 
           <View style={styles.loginLink}>
             <Text style={styles.loginText}>Já tem uma conta? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <TouchableOpacity onPress={() => navigation.navigate("LoginCliente")}>
               <Text style={styles.linkText}>Entre</Text>
             </TouchableOpacity>
           </View>
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   button: {
-    backgroundColor: "#8B4513",
+    backgroundColor: "#7D5745",
     height: 50,
     borderRadius: 8,
     justifyContent: "center",

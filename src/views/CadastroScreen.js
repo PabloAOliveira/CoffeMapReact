@@ -27,7 +27,7 @@ export default function Component({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nome, setNome] = useState("");
-  const [nomeEstabelecimento, setNomeEstabelecimento] = useState("");
+  const [DescricaoEstabelecimento, setDescricaoEstabelecimento] = useState("");
   const [location, setLocation] = useState(null);
   const [mapVisible, setMapVisible] = useState(false);
   const [telefone, setTelefone] = useState("");
@@ -66,7 +66,7 @@ export default function Component({ navigation }) {
         email: email,
         tipo: "proprietario",
         nome: nome,
-        nomeEstabelecimento: nomeEstabelecimento,
+        DescricaoEstabelecimento: DescricaoEstabelecimento,
         telefone: telefone,
         horariosFuncionamento: [horario1, horario2, horario3, horario4],
         dataCadastro: new Date(),
@@ -145,8 +145,8 @@ export default function Component({ navigation }) {
             />
             <TextInput
               style={[styles.input, styles.descriptionInput]}
-              value={nomeEstabelecimento}
-              onChangeText={setNomeEstabelecimento}
+              value={DescricaoEstabelecimento}
+              onChangeText={setDescricaoEstabelecimento}
               placeholder="Descrição"
               multiline
               numberOfLines={4}
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "700",
-    color: "#8B4513",
+    color: "#7D5745",
     marginBottom: 20,
     textAlign: "center",
   },
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
   },
   locationButton: {
-    backgroundColor: "#8B4513",
+    backgroundColor: "#7D5745",
     borderRadius: 8,
     height: 50,
     justifyContent: "center",
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH - 40,
   },
   cadastrarButton: {
-    backgroundColor: "#8B4513",
+    backgroundColor: "#7D5745",
     borderRadius: 8,
     height: 50,
     justifyContent: "center",

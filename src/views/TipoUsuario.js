@@ -66,14 +66,14 @@ const styles = StyleSheet.create({
     lineHeight: 34,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#FFFFFF",
     marginBottom: 24,
     textAlign: "left",
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "flex-start",
+    
     width: "100%",
     gap: 16,
   },
