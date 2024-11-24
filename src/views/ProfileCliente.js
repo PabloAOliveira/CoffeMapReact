@@ -57,7 +57,6 @@ export default function ProfileCliente() {
         console.error('Documento do usuário não encontrado');
       }
     } catch (error) {
-      console.error('Erro ao buscar dados:', error);
       Alert.alert('Erro', 'Não foi possível carregar os dados do usuário.');
     }
   };

@@ -253,13 +253,13 @@ export default function HomeMap() {
                 longitude: cafeteria.location.longitude,
               }}
               title={cafeteria.nome}
-              description={cafeteria.DescricaoEstabelecimento}
+              description={cafeteria.nomeEstabelecimento}
             >
               <Callout>
                 <View>
                   <Text style={styles.markerTitle}>{cafeteria.nome || "Nome não disponível"}</Text>
                   <Text style={styles.markerDescription}>
-                    {cafeteria.DescricaoEstabelecimento || "Sem descrição"}
+                    {cafeteria.nomeEstabelecimento || "Sem descrição"}
                   </Text>
                   <Text style={styles.markerHorarios}>
                     Horários: {horarios}
@@ -282,7 +282,7 @@ export default function HomeMap() {
         >
           <View style={styles.menuHeader}>
             <Image 
-              source={require('../../assets/logomenu.png')} 
+              source={require('../../assets/img.png')} 
               style={styles.menuLogo}
             />
           </View>
@@ -371,11 +371,11 @@ const styles = StyleSheet.create({
   },
   menuHeader: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 10,
   },
   menuLogo: {
     width: 260,
-    height: 60,
+    height: 90,
   },
   menuItem: {
     flexDirection: 'row',

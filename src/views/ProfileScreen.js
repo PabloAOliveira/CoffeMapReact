@@ -82,7 +82,7 @@ export default function ProfileScreen() {
 
         const formattedData = {
           nome: cafeteriaData.nome,
-          nomeEstabelecimento: cafeteriaData.nomeEstabelecimento,
+          nomeEstabelecimento: cafeteriaData.DescricaoEstabelecimento,
           telefone: cafeteriaData.telefone,
           tipo: cafeteriaData.tipo,
           horariosFuncionamento: horarios,
@@ -96,7 +96,6 @@ export default function ProfileScreen() {
         console.error('Cafeteria não encontrada para este usuário');
       }
     } catch (error) {
-      console.error('Erro ao buscar dados:', error);
     }
   };
 
@@ -389,7 +388,7 @@ export default function ProfileScreen() {
             <View>
               <View style={styles.menuHeader}>
                 <Image 
-                  source={require('../../assets/logomenu.png')} 
+                  source={require('../../assets/img.png')} 
                   style={styles.menuLogo}
                 />
               </View>
@@ -642,11 +641,11 @@ const styles = StyleSheet.create({
   },
   menuHeader: {
     alignItems: 'center',
-    marginBottom: 50,
+    marginBottom: 10,
   },
   menuLogo: {
-    width: 260,
-    height: 60,
+    width: 240,
+    height: 90,
   },
   menuItemText: {
     marginLeft: 15,
