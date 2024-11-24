@@ -2,7 +2,7 @@ import * as React from "react";
 import "react-native-get-random-values";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import WelcomeScreen from "./src/views/WelcomeScreen";
 import TipoUsuario from "./src/views/TipoUsuario";
 import CadastroScreen from "./src/views/CadastroScreen";
@@ -11,6 +11,7 @@ import LoginCliente from "./src/views/LoginCliente";
 import CadastroCliente from "./src/views/CadastroCliente";
 import HomeMap from "./src/views/HomeMap";
 import ProfileScreen from "./src/views/ProfileScreen";
+import ProfileCliente from "./src/views/ProfileCliente";
 
 const Stack = createStackNavigator();
 
@@ -54,6 +55,11 @@ export default function App() {
           component={ProfileScreen}
         />
         <Stack.Screen
+          name="ProfileCliente"
+          options={{ headerShown: false }}
+          component={ProfileCliente}
+        />
+        <Stack.Screen
           name="CadastroCliente"
           options={{ headerShown: false }}
           component={CadastroCliente}
@@ -71,3 +77,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
