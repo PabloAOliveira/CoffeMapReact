@@ -1,243 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import {
-//   View,
-//   Text,
-//   Image,
-//   StyleSheet,
-//   TouchableOpacity,
-//   ScrollView,
-// } from "react-native";
-// import { SafeAreaView } from "react-native-safe-area-context";
-// import { useNavigation } from "@react-navigation/native";
-// import { getFirestore, doc, getDoc } from "firebase/firestore";
-// import { getAuth } from "firebase/auth";
-// import { getApp } from "firebase/app";
-
-// export default function ProfileScreen() {
-//   const navigation = useNavigation();
-//   const [cafeteriaData, setCafeteriaData] = useState(null);
-//   const [userData, setUserData] = useState({
-//     email: "",
-//     telefone: "",
-//   });
-
-//   useEffect(() => {
-//     const fetchUserData = async () => {
-//       try {
-//         const auth = getAuth();
-//         const user = auth.currentUser;
-
-//         if (!user) {
-//           setMessage(`Erro : ${error.message || "Usuário não autenticado"}`);
-
-//           return;
-//         }
-
-//         const db = getFirestore(getApp());
-
-//         try {
-//           const userRef = doc(db, "usuarios", user.uid);
-//           const userSnap = await getDoc(userRef);
-
-//           if (!userSnap.exists()) {
-//             setMessage(
-//               `Erro : ${error.message || "Dados do usuário não encontrados"}`
-//             );
-//             return;
-//           }
-
-//           const userInfo = userSnap.data();
-//           setUserData({
-//             email: userInfo.email || "",
-//             telefone: userInfo.telefone || "",
-//           });
-
-//           const cafeteriaRef = doc(db, "cafeterias", user.uid);
-//           const cafeteriaSnap = await getDoc(cafeteriaRef);
-
-//           if (cafeteriaSnap.exists()) {
-//             setCafeteriaData(cafeteriaSnap.data());
-//           } else {
-//             setMessage(`Erro : ${error.message || "Cafeteria não encontrada"}`);
-//           }
-//         } catch (error) {
-//           setMessage(`Erro : ${error.message || "Erro de permissão"}`);
-//         }
-//       } catch (error) {
-//         setMessage(`Erro : ${error.message || "Erro ao buscar dados"}`);
-//       }
-//     };
-
-//     fetchUserData();
-//   }, []);
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       <ScrollView>
-//         {/* Back Button */}
-//         <TouchableOpacity
-//           style={styles.backButton}
-//           onPress={() => navigation.goBack()}
-//         >
-//           <Text style={styles.backButtonText}>←</Text>
-//         </TouchableOpacity>
-
-//         {/* Profile Section */}
-//         <View style={styles.profileSection}>
-//           <Image
-//             source={{
-//               uri: cafeteriaData
-//                 ? cafeteriaData.profileImage
-//                 : "/placeholder.svg",
-//             }}
-//             style={styles.profileImage}
-//           />
-//           <Text style={styles.profileText}>
-//             {userData.email} | {userData.telefone}
-//           </Text>
-//         </View>
-
-//         {/* Tabs */}
-//         <View style={styles.tabContainer}>
-//           <TouchableOpacity style={[styles.tab, styles.activeTab]}>
-//             <Text style={styles.activeTabText}>Meu perfil</Text>
-//           </TouchableOpacity>
-//           <TouchableOpacity style={styles.tab}>
-//             <Text style={styles.tabText}>Minha Cafeteria</Text>
-//           </TouchableOpacity>
-//         </View>
-
-//         {/* Menu Items */}
-//         <View style={styles.menuContainer}>
-//           <TouchableOpacity style={styles.menuItem}>
-//             <Text style={styles.menuText}>Editar Perfil</Text>
-//           </TouchableOpacity>
-
-//           {/* Renderizar os dados da cafeteria */}
-//           {cafeteriaData && (
-//             <>
-//               <View style={styles.menuItem}>
-//                 <Text style={styles.menuText}>Nome: {cafeteriaData.nome}</Text>
-//               </View>
-
-//               <View style={styles.menuItem}>
-//                 <Text style={styles.menuText}>
-//                   Descrição: {cafeteriaData.descricaoEstabelecimento}
-//                 </Text>
-//               </View>
-
-//               <View style={styles.menuItem}>
-//                 <Text style={styles.menuText}>
-//                   Horários de Funcionamento:{" "}
-//                   {cafeteriaData.horariosFuncionamento.join(" | ")}
-//                 </Text>
-//               </View>
-
-//               <View style={styles.menuItem}>
-//                 <Text style={styles.menuText}>
-//                   Telefone: {cafeteriaData.telefone}
-//                 </Text>
-//               </View>
-//             </>
-//           )}
-
-//           <TouchableOpacity style={styles.menuItem}>
-//             <Text style={styles.menuText}>Notificações</Text>
-//           </TouchableOpacity>
-
-//           <TouchableOpacity style={styles.menuItem}>
-//             <View style={styles.languageContainer}>
-//               <Text style={styles.menuText}>Idioma</Text>
-//               <Text style={styles.languageText}>Português</Text>
-//             </View>
-//           </TouchableOpacity>
-
-//           <TouchableOpacity style={styles.menuItem}>
-//             <Text style={styles.menuText}>Segurança</Text>
-//           </TouchableOpacity>
-
-//           <TouchableOpacity style={styles.menuItem}>
-//             <Text style={styles.menuText}>Ajuda</Text>
-//           </TouchableOpacity>
-
-//           <TouchableOpacity style={styles.menuItem}>
-//             <Text style={styles.menuText}>Termos e Condições</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </ScrollView>
-//     </SafeAreaView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#FAF7F7",
-//   },
-//   backButton: {
-//     padding: 16,
-//   },
-//   backButtonText: {
-//     fontSize: 24,
-//     color: "#000",
-//   },
-//   profileSection: {
-//     alignItems: "center",
-//     marginVertical: 20,
-//   },
-//   profileImage: {
-//     width: 100,
-//     height: 100,
-//     borderRadius: 50,
-//     marginBottom: 10,
-//   },
-//   profileText: {
-//     color: "#333",
-//     fontSize: 14,
-//   },
-//   tabContainer: {
-//     flexDirection: "row",
-//     marginHorizontal: 20,
-//     marginBottom: 20,
-//   },
-//   tab: {
-//     flex: 1,
-//     paddingVertical: 10,
-//     alignItems: "center",
-//   },
-//   activeTab: {
-//     borderBottomWidth: 2,
-//     borderBottomColor: "#000",
-//   },
-//   tabText: {
-//     color: "#666",
-//   },
-//   activeTabText: {
-//     color: "#000",
-//     fontWeight: "500",
-//   },
-//   menuContainer: {
-//     paddingHorizontal: 20,
-//   },
-//   menuItem: {
-//     paddingVertical: 15,
-//     borderBottomWidth: StyleSheet.hairlineWidth,
-//     borderBottomColor: "#DDD",
-//   },
-//   menuText: {
-//     fontSize: 16,
-//     color: "#333",
-//   },
-//   languageContainer: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     alignItems: "center",
-//   },
-//   languageText: {
-//     color: "#666",
-//     fontSize: 14,
-//   },
-// });
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -247,11 +7,18 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  TextInput,
+  Alert,
+  Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { getFirestore, doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, deleteDoc } from 'firebase/firestore';
+import { getAuth, signOut } from 'firebase/auth';
 import { getApp } from 'firebase/app';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Animated, { SlideInLeft, SlideOutLeft } from 'react-native-reanimated';
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -261,71 +28,172 @@ export default function ProfileScreen() {
     email: '',
     telefone: '',
   });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedData, setEditedData] = useState(null);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-
-        if (!user) {
-          console.error('Usuário não autenticado');
-          return;
-        }
-
-        const db = getFirestore(getApp());
-
-        // Buscar dados do usuário
-        const userRef = doc(db, 'usuarios', user.uid);
-        const userSnap = await getDoc(userRef);
-
-        if (userSnap.exists()) {
-          const userInfo = userSnap.data();
-          setUserData({
-            email: userInfo.email || '',
-            telefone: userInfo.telefone || '',
-          });
-        }
-
-        // Buscar a cafeteria do usuário logado
-        const cafeteriasRef = collection(db, 'cafeterias');
-        const q = query(cafeteriasRef, where('email', '==', user.email));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-          const cafeteriaDoc = querySnapshot.docs[0];
-          const cafeteriaData = cafeteriaDoc.data();
-          
-          // Formatar os horários de funcionamento
-          const horarios = {
-            "Segunda-Feira": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
-            "Terça-Feira": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
-            "Quarta-Feira": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
-            "Quinta-Feira": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
-            "Sexta": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
-            "Sábado": `${cafeteriaData.horariosFuncionamento[1]} - ${cafeteriaData.horariosFuncionamento[3]}`,
-            "Domingo": `${cafeteriaData.horariosFuncionamento[2]} - ${cafeteriaData.horariosFuncionamento[3]}`
-          };
-
-          setCafeteriaData({
-            nome: cafeteriaData.nome,
-            nomeEstabelecimento: cafeteriaData.nomeEstabelecimento,
-            telefone: cafeteriaData.telefone,
-            tipo: cafeteriaData.tipo,
-            horariosFuncionamento: horarios,
-            location: cafeteriaData.location,
-            email: cafeteriaData.email
-          });
-        } else {
-          console.error('Cafeteria não encontrada para este usuário');
-        }
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-      }
-    };
-
     fetchUserData();
   }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error('Usuário não autenticado');
+        return;
+      }
+
+      const db = getFirestore(getApp());
+
+      // Buscar dados do usuário
+      const userRef = doc(db, 'usuarios', user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userInfo = userSnap.data();
+        setUserData({
+          email: userInfo.email || '',
+          telefone: userInfo.telefone || '',
+        });
+      }
+
+      // Buscar a cafeteria do usuário logado
+      const cafeteriasRef = collection(db, 'usuarios');
+      const q = query(cafeteriasRef, where('email', '==', user.email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const cafeteriaDoc = querySnapshot.docs[0];
+        const cafeteriaData = cafeteriaDoc.data();
+        
+        // Formatar os horários de funcionamento
+        const horarios = {
+          "Segunda-Feira": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
+          "Terça-Feira": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
+          "Quarta-Feira": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
+          "Quinta-Feira": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
+          "Sexta": `${cafeteriaData.horariosFuncionamento[0]} - ${cafeteriaData.horariosFuncionamento[3]}`,
+          "Sábado": `${cafeteriaData.horariosFuncionamento[1]} - ${cafeteriaData.horariosFuncionamento[3]}`,
+          "Domingo": `${cafeteriaData.horariosFuncionamento[2]} - ${cafeteriaData.horariosFuncionamento[3]}`
+        };
+
+        const formattedData = {
+          nome: cafeteriaData.nome,
+          nomeEstabelecimento: cafeteriaData.nomeEstabelecimento,
+          telefone: cafeteriaData.telefone,
+          tipo: cafeteriaData.tipo,
+          horariosFuncionamento: horarios,
+          location: cafeteriaData.location,
+          email: cafeteriaData.email
+        };
+
+        setCafeteriaData(formattedData);
+        setEditedData(formattedData);
+      } else {
+        console.error('Cafeteria não encontrada para este usuário');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        Alert.alert('Erro', 'Usuário não autenticado');
+        return;
+      }
+
+      const db = getFirestore();
+      const cafeteriaRef = doc(db, 'usuarios', user.uid);
+
+      const updatedData = {
+        ...editedData,
+        horariosFuncionamento: [
+          editedData.horariosFuncionamento["Segunda-Feira"].split(' - ')[0],
+          editedData.horariosFuncionamento["Sábado"].split(' - ')[0],
+          editedData.horariosFuncionamento["Domingo"].split(' - ')[0],
+          editedData.horariosFuncionamento["Segunda-Feira"].split(' - ')[1],
+        ],
+      };
+
+      await updateDoc(cafeteriaRef, updatedData);
+      setCafeteriaData(editedData);
+      setIsEditing(false);
+      Alert.alert('Sucesso', 'Dados da cafeteria atualizados com sucesso!');
+    } catch (error) {
+      console.error('Erro ao atualizar dados:', error);
+      Alert.alert('Erro', 'Não foi possível atualizar os dados da cafeteria.');
+    }
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Deletar Cafeteria",
+      "Você tem certeza que deseja deletar sua cafeteria? Esta ação não pode ser desfeita.",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel"
+        },
+        { 
+          text: "Sim, deletar", 
+          onPress: () => deleteCafeteria(),
+          style: "destructive"
+        }
+      ]
+    );
+  };
+
+  const deleteCafeteria = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        Alert.alert('Erro', 'Usuário não autenticado');
+        return;
+      }
+
+      const db = getFirestore();
+      const cafeteriaRef = doc(db, 'usuarios', user.uid);
+
+      // Delete cafeteria document
+      await deleteDoc(cafeteriaRef);
+
+      // Voltar para a tela anterior
+      navigation.goBack();
+
+      Alert.alert('Sucesso', 'Sua cafeteria foi deletada e você foi deslogado.');
+    } catch (error) {
+      console.error('Erro ao deletar cafeteria:', error);
+      Alert.alert('Erro', 'Não foi possível deletar a cafeteria.');
+    }
+  };
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+
+  const menuItems = [
+    { icon: 'home', label: 'Home', onPress: () => {
+      navigation.navigate('HomeMap');
+      setMenuVisible(false);
+    }},
+    { icon: 'person', label: 'Perfil', onPress: () => {
+      setActiveTab('profile');
+      setMenuVisible(false);
+    }},
+    { icon: 'help-outline', label: 'Suporte', onPress: () => {
+      setMenuVisible(false);
+    }},
+  ];
 
   const renderProfileTab = () => (
     <View style={styles.menuContainer}>
@@ -352,26 +220,103 @@ export default function ProfileScreen() {
       {cafeteriaData ? (
         <>
           <View style={styles.cafeteriaSection}>
-            <Text style={styles.cafeteriaTitle}>{cafeteriaData.nome}</Text>
-            <Text style={styles.cafeteriaSubtitle}>{cafeteriaData.nomeEstabelecimento}</Text>
-            <Text style={styles.cafeteriaAddress}>
-              Latitude: {cafeteriaData.location.latitude}
-              {'\n'}
-              Longitude: {cafeteriaData.location.longitude}
-            </Text>
+            {isEditing ? (
+              <>
+                <TextInput
+                  style={styles.input}
+                  value={editedData.nome}
+                  onChangeText={(text) => setEditedData({...editedData, nome: text})}
+                  placeholder="Nome"
+                />
+                <TextInput
+                  style={styles.input}
+                  value={editedData.nomeEstabelecimento}
+                  onChangeText={(text) => setEditedData({...editedData, nomeEstabelecimento: text})}
+                  placeholder="Nome do Estabelecimento"
+                />
+                <TextInput
+                  style={styles.input}
+                  value={editedData.telefone}
+                  onChangeText={(text) => setEditedData({...editedData, telefone: text})}
+                  placeholder="Telefone"
+                  keyboardType="phone-pad"
+                />
+                <TextInput
+                  style={styles.input}
+                  value={editedData.location.latitude.toString()}
+                  onChangeText={(text) => setEditedData({...editedData, location: {...editedData.location, latitude: parseFloat(text)}})}
+                  placeholder="Latitude"
+                  keyboardType="numeric"
+                />
+                <TextInput
+                  style={styles.input}
+                  value={editedData.location.longitude.toString()}
+                  onChangeText={(text) => setEditedData({...editedData, location: {...editedData.location, longitude: parseFloat(text)}})}
+                  placeholder="Longitude"
+                  keyboardType="numeric"
+                />
+              </>
+            ) : (
+              <>
+                <Text style={styles.cafeteriaTitle}>{cafeteriaData.nome}</Text>
+                <Text style={styles.cafeteriaSubtitle}>{cafeteriaData.nomeEstabelecimento}</Text>
+                <Text style={styles.cafeteriaAddress}>
+                  Latitude: {cafeteriaData.location.latitude}
+                  {'\n'}
+                  Longitude: {cafeteriaData.location.longitude}
+                </Text>
+              </>
+            )}
           </View>
           <View style={styles.cafeteriaSection}>
             <Text style={styles.sectionTitle}>Horário de funcionamento</Text>
-            {Object.entries(cafeteriaData.horariosFuncionamento).map(([dia, horario]) => (
+            {Object.entries(isEditing ? editedData.horariosFuncionamento : cafeteriaData.horariosFuncionamento).map(([dia, horario]) => (
               <View key={dia} style={styles.horarioRow}>
                 <Text style={styles.horarioDia}>{dia}</Text>
-                <Text style={styles.horarioText}>{horario}</Text>
+                {isEditing ? (
+                  <TextInput
+                    style={styles.horarioInput}
+                    value={horario}
+                    onChangeText={(text) => setEditedData({
+                      ...editedData,
+                      horariosFuncionamento: {
+                        ...editedData.horariosFuncionamento,
+                        [dia]: text
+                      }
+                    })}
+                    placeholder="00:00 - 00:00"
+                  />
+                ) : (
+                  <Text style={styles.horarioText}>{horario}</Text>
+                )}
               </View>
             ))}
           </View>
-          <TouchableOpacity style={styles.editButton}>
-            <Text style={styles.editButtonText}>Editar Cafeteria</Text>
-          </TouchableOpacity>
+          {isEditing ? (
+            <View style={styles.editButtonsContainer}>
+              <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                <Text style={styles.saveButtonText}>Salvar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.cancelButton} onPress={() => setIsEditing(false)}>
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <TouchableOpacity 
+                style={styles.editButton}
+                onPress={() => setIsEditing(true)}
+              >
+                <Text style={styles.editButtonText}>Editar Cafeteria</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.deleteButton}
+                onPress={handleDelete}
+              >
+                <Text style={styles.deleteButtonText}>Deletar Cafeteria</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </>
       ) : (
         <Text style={styles.noDataText}>Nenhuma cafeteria encontrada para este usuário.</Text>
@@ -383,15 +328,15 @@ export default function ProfileScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
+          style={styles.menuButton}
+          onPress={toggleMenu}
         >
-          <Text style={styles.backButtonText}>←</Text>
+          <Icon name={menuVisible ? "close" : "menu"} size={24} color="#000" />
         </TouchableOpacity>
 
         <View style={styles.profileSection}>
           <Image
-            source={require('../../assets/logo.jpeg')}
+            source={require('../../assets/fotop.png')}
             style={styles.profileImage}
           />
           <TouchableOpacity style={styles.editImageButton}>
@@ -433,6 +378,48 @@ export default function ProfileScreen() {
 
         {activeTab === 'profile' ? renderProfileTab() : renderCafeteriaTab()}
       </ScrollView>
+
+      {menuVisible && (
+        <Animated.View
+          entering={SlideInLeft}
+          exiting={SlideOutLeft}
+          style={styles.sideMenu}
+        >
+          <View style={styles.menuContent}>
+            <View>
+              <View style={styles.menuHeader}>
+                <Image 
+                  source={require('../../assets/logomenu.png')} 
+                  style={styles.menuLogo}
+                />
+              </View>
+              
+              {
+menuItems.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.menuItem}
+                  onPress={item.onPress}
+                >
+                  <Icon name={item.icon} size={24} color="#666" />
+                  <Text style={styles.menuItemText}>{item.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            
+            <TouchableOpacity
+              style={[styles.menuItem, styles.logoutButton]}
+              onPress={() => {
+                navigation.navigate('WelcomeScreen');
+                setMenuVisible(false);
+              }}
+            >
+              <Icon name="logout" size={24} color="#FF4444" />
+              <Text style={[styles.menuItemText, styles.logoutText]}>Sair</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      )}
     </SafeAreaView>
   );
 }
@@ -442,12 +429,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FAF7F7',
   },
-  backButton: {
-    padding: 16,
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: '#000',
+  menuButton: {
+    position: 'absolute',
+    top: 40,
+    left: 10,
+    zIndex: 10,
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 15,
   },
   profileSection: {
     alignItems: 'center',
@@ -506,11 +495,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   menuItem: {
-    paddingVertical: 15,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#DDD',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
   },
   menuText: {
+    marginLeft: 15,
     fontSize: 16,
     color: '#333',
   },
@@ -565,10 +555,112 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 16,
   },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  deleteButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+  },
   noDataText: {
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
     marginTop: 20,
   },
+  input: {
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  horarioInput: {
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 5,
+    padding: 5,
+    width: '60%',
+  },
+  editButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  saveButton: {
+    backgroundColor: '#000',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 10,
+  },
+  saveButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+  },
+  cancelButton: {
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#000',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    flex: 1,
+    marginLeft: 10,
+  },
+  cancelButtonText: {
+    color: '#000',
+    fontSize: 16,
+  },
+  sideMenu: {
+    position: 'absolute',
+    width: screenWidth * 0.75,
+    height: '110%',
+    top: 0,
+    left: 0,
+    backgroundColor: '#fff',
+    zIndex: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  menuContent: {
+    flex: 1,
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+  },
+  menuHeader: {
+    alignItems: 'center',
+    marginBottom: 50,
+  },
+  menuLogo: {
+    width: 260,
+    height: 60,
+  },
+  menuItemText: {
+    marginLeft: 15,
+    fontSize: 16,
+    color: '#333',
+  },
+  logoutButton: {
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    paddingTop: 20,
+    marginBottom: 20,
+  },
+  logoutText: {
+    color: '#FF4444',
+  },
 });
+
